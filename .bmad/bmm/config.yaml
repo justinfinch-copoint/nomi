@@ -3,7 +3,7 @@
 # Version: 6.0.0-alpha.8
 # Date: 2025-11-10T18:41:16.728Z
 
-project_name: todoer
+project_name: Nomi
 user_skill_level: intermediate
 tech_docs: '{project-root}/docs/technical'
 dev_ephemeral_location: '{project-root}/.bmad-ephemeral'
@@ -11,7 +11,7 @@ tea_use_mcp_enhancements: false
 
 # Core Configuration Values
 bmad_folder: .bmad
-user_name: BMad
+user_name: Justin
 communication_language: English
 document_output_language: English
 output_folder: '{project-root}/docs'
