@@ -108,19 +108,20 @@ Advanced features from brainstorming session:
 
 **Frontend:**
 - **React 18+** with **Vite** (modern, fast dev server, HMR)
-- **@azure/msal-react** and **@azure/msal-browser** for EntraID authentication flow
 - **Zustand** for state management (modern, minimal boilerplate, performant)
 - TypeScript (optional but recommended for type safety)
 - React Router for client-side routing
 - Styling: TBD (Tailwind CSS, CSS Modules, or styled-components)
+- **No client-side auth libraries** - all authentication handled server-side
 
 **Backend:**
 - **FastAPI** (Python 3.10+)
 - **BFF Pattern** (Backend for Frontend) - API specifically tailored for React frontend needs
 - **Pydantic** for data validation and type safety
 - **SQLAlchemy** ORM for database interactions
-- **MSAL Python** for EntraID/Azure AD integration
-- **Session management** (Redis or in-memory for dev) with HTTP-only cookies
+- **MSAL Python** for EntraID OAuth2 token exchange
+- **authlib** for OAuth2 authorization code flow handling
+- **Session management** (Redis or in-memory for dev) with HTTP-only signed cookies
 - **Alembic** for database migrations
 
 **Database:**
@@ -132,10 +133,11 @@ Advanced features from brainstorming session:
 - JSON request/response format
 
 **Authentication:**
-- **EntraID (Azure AD)** with **MSAL (Microsoft Authentication Library)** for identity provider
-- **Session-based authentication** with HTTP-only cookies
-- **Server-side token management** - access/refresh tokens never exposed to browser
-- Backend exchanges MSAL tokens for server-managed sessions
+- **EntraID (Azure AD)** as identity provider
+- **OAuth2 Authorization Code Flow** - fully server-side implementation
+- **MSAL Python** for token exchange with EntraID
+- **Session-based authentication** with HTTP-only signed cookies
+- **Zero client-side token handling** - all OAuth2 flows managed by backend
 - Protected API endpoints using session validation
 
 ### Key Architectural Patterns to Implement
@@ -146,13 +148,18 @@ Advanced features from brainstorming session:
    - Single API layer between React and database
 
 2. **Authentication Flow (EntraID + Session-Based)**
-   - Frontend initiates MSAL authentication with EntraID
-   - User authenticates with Microsoft (redirect flow)
-   - Backend receives MSAL token, validates with EntraID
-   - Backend creates server-side session, returns HTTP-only cookie
-   - All API requests use session cookie (credentials: 'include')
-   - **No tokens stored in browser** - enhanced security against XSS attacks
-   - Client-side auth state management with Zustand (user info only, no tokens)
+   - Frontend redirects to backend `/auth/login` endpoint
+   - Backend redirects to EntraID authorization URL (OAuth2 authorization code flow)
+   - User authenticates with Microsoft (EntraID handles login/MFA)
+   - EntraID redirects to backend `/auth/callback` with authorization code
+   - Backend exchanges authorization code for tokens using MSAL Python
+   - Backend validates tokens and creates server-side session
+   - Backend stores session in Redis/memory and sets HTTP-only signed cookie
+   - Backend redirects user to frontend application
+   - Frontend calls `/auth/me` to retrieve user profile and auth status
+   - All API requests automatically include session cookie
+   - **Zero token exposure to browser** - complete immunity to XSS token theft
+   - Client-side auth state management with Zustand (user profile only, no tokens)
    - Protected routes in React Router based on session state
 
 3. **State Management Architecture**
@@ -178,38 +185,48 @@ Advanced features from brainstorming session:
 
 ### Authentication Architecture Details
 
-**Security-First Approach: No Tokens in Browser**
+**Security-First Approach: Fully Server-Side OAuth2**
 
-Traditional SPA authentication often stores JWT tokens in localStorage or sessionStorage, exposing them to XSS attacks. Nomi implements a more secure pattern:
+Traditional SPA authentication often stores JWT tokens in localStorage or sessionStorage, or uses client-side MSAL libraries that handle tokens in browser memory. Both approaches expose tokens to potential XSS attacks. Nomi implements maximum security by keeping all OAuth2 flows and token handling exclusively on the backend.
 
 **Flow:**
-1. **Frontend (React + MSAL):** User clicks "Sign in with Microsoft"
-2. **MSAL Redirect:** User redirected to Microsoft login page (EntraID)
-3. **Microsoft Authentication:** User enters credentials, completes MFA if required
-4. **MSAL Callback:** Microsoft redirects back with authorization code
-5. **Token Exchange (Frontend):** MSAL exchanges code for access token (handled in browser memory, not persisted)
-6. **Backend Session Exchange:** Frontend sends MSAL token to backend `/auth/session` endpoint
-7. **Backend Validation:** Backend validates token with Microsoft Graph API
-8. **Session Creation:** Backend creates server-side session (stored in Redis/memory)
-9. **Cookie Response:** Backend returns HTTP-only, Secure, SameSite cookie with session ID
-10. **Subsequent Requests:** All API calls include session cookie automatically (credentials: 'include')
-11. **MSAL Token Discarded:** Frontend discards MSAL token after session exchange
+1. **Frontend:** User clicks "Sign in with Microsoft"
+2. **Frontend Redirect:** Browser redirects to backend `/auth/login` endpoint
+3. **Backend OAuth2 Initiation:** Backend constructs EntraID authorization URL with:
+   - `client_id` (application ID)
+   - `redirect_uri` (backend callback URL)
+   - `scope` (openid, profile, email)
+   - `state` (CSRF protection token)
+   - `response_type=code` (authorization code flow)
+4. **EntraID Authorization:** Backend redirects user to Microsoft login page
+5. **User Authentication:** User enters credentials at Microsoft, completes MFA if required
+6. **EntraID Callback:** Microsoft redirects to backend `/auth/callback?code=...&state=...`
+7. **Backend Token Exchange:** Backend uses MSAL Python to exchange authorization code for tokens
+8. **Token Validation:** Backend validates ID token signature and claims
+9. **Session Creation:** Backend creates server-side session with user profile (stored in Redis/memory)
+10. **Cookie Response:** Backend sets HTTP-only, Secure, SameSite cookie with session ID
+11. **Frontend Redirect:** Backend redirects user to frontend application home page
+12. **Auth Status Check:** Frontend calls `/auth/me` to retrieve user profile and auth status
+13. **Subsequent Requests:** All API calls automatically include session cookie (no credentials config needed)
 
 **Security Benefits:**
-- ✅ No access tokens stored in browser (immune to XSS token theft)
+- ✅ **Zero token exposure to browser** - tokens never leave backend (maximum XSS immunity)
+- ✅ **No client-side auth libraries needed** - simpler frontend, smaller bundle
 - ✅ HTTP-only cookies cannot be accessed by JavaScript
+- ✅ Signed cookies prevent tampering
 - ✅ SameSite protection against CSRF attacks
 - ✅ Secure flag ensures cookies only sent over HTTPS
 - ✅ Server-side session validation on every request
 - ✅ Easy session revocation (delete server-side session)
+- ✅ Backend can refresh tokens transparently without frontend involvement
 
 **Trade-offs:**
 - Requires session storage infrastructure (Redis recommended for production)
-- Backend becomes stateful (sessions must be shared across instances)
-- Slightly more complex than pure JWT approach
+- Backend becomes stateful (sessions must be shared across instances if scaling horizontally)
+- Slightly more backend complexity than client-side MSAL approach
 
 **Why This Matters for Learning:**
-This architecture represents enterprise-grade security patterns used in production systems. It's more complex than tutorial-level JWT, but teaches real-world security considerations.
+This architecture represents maximum-security patterns used in enterprise systems handling sensitive data. While client-side MSAL is easier, fully server-side OAuth2 teaches defense-in-depth principles and represents best practices for high-security applications.
 
 ### Deployment Architecture Details
 
@@ -298,11 +315,12 @@ Separate frontend/backend hosting is valuable for high-scale applications with C
 
 ### Known Learning Challenges
 1. **First-time Zustand usage** - expect iteration on state management patterns
-2. **EntraID/MSAL integration** - understanding redirect flows, token validation, and session exchange
-3. **Session management** - implementing secure session storage (Redis or alternative) and HTTP-only cookie handling
-4. **Vite proxy configuration** - setting up development proxy to avoid CORS while maintaining HMR
-5. **Single-server deployment** - configuring FastAPI to serve both static files and API endpoints
-6. **Build process integration** - automating React build and deployment to FastAPI static directory
+2. **Server-side OAuth2 implementation** - implementing authorization code flow with MSAL Python, handling redirects, state management, and token exchange
+3. **Session management** - implementing secure session storage (Redis or alternative) with signed HTTP-only cookies
+4. **EntraID application configuration** - setting up redirect URIs for backend (not frontend), configuring client secrets
+5. **Vite proxy configuration** - setting up development proxy to avoid CORS while maintaining HMR
+6. **Single-server deployment** - configuring FastAPI to serve both static files and API endpoints
+7. **Build process integration** - automating React build and deployment to FastAPI static directory
 
 ---
 
@@ -318,13 +336,14 @@ Separate frontend/backend hosting is valuable for high-scale applications with C
 - ✅ Clean separation of concerns (BFF pattern evident)
 
 **Learning Outcome Metrics:**
-- Understanding of EntraID/MSAL authentication flow (redirect, token exchange, session creation)
-- Knowledge of session-based authentication and HTTP-only cookie security
+- Understanding of server-side OAuth2 authorization code flow with EntraID
+- Knowledge of MSAL Python for token exchange and validation
+- Expertise in session-based authentication with signed HTTP-only cookies
 - Proficiency with Zustand patterns (stores, actions, selectors)
 - Knowledge of FastAPI project structure and best practices
 - Experience with React + Vite modern development workflow
 - Understanding of deployment architecture for full-stack apps with session management
-- Reusable code patterns for future enterprise projects
+- Reusable code patterns for maximum-security authentication in future enterprise projects
 
 **Documentation Goals:**
 - Architectural decision records (why certain patterns were chosen)
