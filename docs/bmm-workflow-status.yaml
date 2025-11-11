@@ -36,7 +36,7 @@ workflow_status:
   # Phase 0: Discovery (Optional)
   brainstorm-project: docs/bmm-brainstorming-session-2025-11-10.md
   research: optional  # agent: analyst
-  product-brief: optional  # agent: analyst
+  product-brief: docs/product-brief-Nomi-2025-11-11.md
 
   # Phase 1: Planning
   prd: required  # agent: pm
