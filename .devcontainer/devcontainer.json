@@ -24,7 +24,9 @@
 			"extensions": [
 				"ms-toolsai.jupyter",
 				"akamud.vscode-theme-onedark",
-				"pkief.material-icon-theme"
+				"pkief.material-icon-theme",
+				"yzhang.markdown-all-in-one",
+				"bierner.markdown-mermaid"
 			],
 			"settings": {
 				"python.defaultInterpreterPath": "/usr/local/bin/python",

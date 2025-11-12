@@ -39,14 +39,14 @@ workflow_status:
   product-brief: docs/product-brief-Nomi-2025-11-11.md
 
   # Phase 1: Planning
-  prd: required  # agent: pm
+  prd: docs/PRD.md  # agent: pm
   validate-prd: optional  # agent: pm
   create-design: conditional  # agent: ux-designer
 
   # Phase 2: Solutioning
-  create-architecture: required  # agent: architect
+  create-architecture: docs/architecture.md  # agent: architect
   validate-architecture: optional  # agent: architect
-  solutioning-gate-check: required  # agent: architect
+  solutioning-gate-check: docs/implementation-readiness-report-2025-11-12.md  # agent: architect
 
   # Phase 3: Implementation
   sprint-planning: required  # agent: sm
