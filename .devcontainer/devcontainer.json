@@ -15,7 +15,7 @@
 		"ghcr.io/devcontainers/features/node:1": {}
 	},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
+	"forwardPorts": [5173, 8000],
 	// Use 'postCreateCommand' to run commands after the container is created.
 	"postCreateCommand": "chmod +x .devcontainer/post-create.sh && .devcontainer/post-create.sh",
 	// Configure tool-specific properties.
