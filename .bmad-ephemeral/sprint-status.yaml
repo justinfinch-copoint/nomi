@@ -1,0 +1,126 @@
+# Sprint Status Template
+# This tracks progress through BMM methodology phases
+# Phase 4 (Implementation) sprint tracking
+
+# generated: 2025-11-12
+# project: Nomi
+# project_key: Nomi
+# tracking_system: file-system
+# story_location: /workspace/docs/stories
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic exists in epic file but not contexted
+#   - contexted: Epic tech context created (required before drafting stories)
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - drafted: Story file created in stories folder
+#   - ready-for-dev: Draft approved and story context created
+#   - in-progress: Developer actively working on implementation
+#   - review: Under SM review (via code-review workflow)
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - completed: Retrospective has been done
+#
+# WORKFLOW NOTES:
+# ===============
+# - Epics should be 'contexted' before stories can be 'drafted'
+# - Stories can be worked in parallel if team capacity allows
+# - SM typically drafts next story after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', SM reviews, then Dev moves to 'done'
+
+generated: 2025-11-12
+project: Nomi
+project_key: Nomi
+tracking_system: file-system
+story_location: /workspace/docs/stories
+
+development_status:
+  # Epic 1: Project Foundation & Infrastructure
+  epic-1: backlog
+  1-1-initialize-project-structure-and-build-system: backlog
+  1-2-set-up-postgresql-database-and-sqlalchemy-orm: backlog
+  1-3-create-basic-health-check-and-api-documentation-endpoints: backlog
+  1-4-configure-session-storage-infrastructure: backlog
+  1-5-create-basic-frontend-layout-and-routing: backlog
+  1-6-set-up-basic-deployment-configuration: backlog
+  epic-1-retrospective: optional
+
+  # Epic 2: Authentication & Session Management
+  epic-2: backlog
+  2-1-configure-entraid-application-registration: backlog
+  2-2-implement-oauth2-authorization-initiation-login-redirect: backlog
+  2-3-implement-oauth2-token-exchange-callback-handler: backlog
+  2-4-create-server-side-session-and-set-http-only-cookie: backlog
+  2-5-create-user-record-in-database-first-time-login: backlog
+  2-6-implement-session-validation-middleware-for-protected-api-endpoints: backlog
+  2-7-create-apiauthme-endpoint-to-retrieve-user-profile: backlog
+  2-8-implement-logout-functionality: backlog
+  2-9-implement-zustand-auth-store-and-frontend-auth-state-management: backlog
+  2-10-implement-protected-route-guards-in-react-router: backlog
+  2-11-implement-session-expiry-handling: backlog
+  epic-2-retrospective: optional
+
+  # Epic 3: Task Management
+  epic-3: backlog
+  3-1-create-tasks-database-schema-and-model: backlog
+  3-2-create-task-pydantic-schemas-for-api-validation: backlog
+  3-3-implement-post-apitasks-create-task: backlog
+  3-4-implement-get-apitasks-list-all-users-tasks: backlog
+  3-5-implement-get-apitasksid-read-single-task: backlog
+  3-6-implement-put-apitasksid-update-task: backlog
+  3-7-implement-delete-apitasksid-delete-task: backlog
+  3-8-create-zustand-tasks-store-for-state-management: backlog
+  3-9-build-task-list-ui-component: backlog
+  3-10-build-task-creation-form: backlog
+  3-11-build-task-edit-form: backlog
+  3-12-build-quick-status-toggle-for-tasks: backlog
+  3-13-build-task-delete-functionality-with-confirmation: backlog
+  epic-3-retrospective: optional
+
+  # Epic 4: Inspiration Management
+  epic-4: backlog
+  4-1-create-inspirations-database-schema-and-model: backlog
+  4-2-create-inspiration-pydantic-schemas-for-api-validation: backlog
+  4-3-implement-post-apiinspirations-create-inspiration: backlog
+  4-4-implement-get-apiinspirations-list-all-users-inspirations: backlog
+  4-5-implement-get-apiinspirationsid-read-single-inspiration: backlog
+  4-6-implement-put-apiinspirationsid-update-inspiration: backlog
+  4-7-implement-delete-apiinspirationsid-delete-inspiration: backlog
+  4-8-create-zustand-inspirations-store-for-state-management: backlog
+  4-9-build-inspiration-list-ui-component: backlog
+  4-10-build-inspiration-creation-form: backlog
+  4-11-build-inspiration-edit-form: backlog
+  4-12-build-inspiration-delete-functionality-with-confirmation: backlog
+  4-13-implement-post-apiinspirationsidconvert-convert-inspiration-to-task: backlog
+  4-14-build-convert-to-task-ui-feature: backlog
+  epic-4-retrospective: optional
+
+  # Epic 5: Organization & Filtering
+  epic-5: backlog
+  5-1-implement-client-side-task-status-filter: backlog
+  5-2-implement-client-side-sort-for-tasks: backlog
+  5-3-implement-client-side-sort-for-inspirations: backlog
+  5-4-add-task-and-inspiration-counts-to-navigation: backlog
+  epic-5-retrospective: optional
+
+  # Epic 6: User Profile & Settings
+  epic-6: backlog
+  6-1-create-profile-page-ui: backlog
+  6-2-add-profile-link-to-navigation: backlog
+  6-3-add-activity-summary-to-profile-page: backlog
+  epic-6-retrospective: optional
+
+  # Epic 7: Deployment & Documentation
+  epic-7: backlog
+  7-1-create-deployment-documentation: backlog
+  7-2-create-architecture-decision-records-adrs: backlog
+  7-3-create-comprehensive-readme: backlog
+  7-4-add-api-documentation-with-examples: backlog
+  7-5-add-developer-setup-guide: backlog
+  7-6-create-testing-documentation-and-examples: backlog
+  epic-7-retrospective: optional
