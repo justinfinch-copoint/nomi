@@ -1,0 +1,235 @@
+<story-context id=".bmad/bmm/workflows/4-implementation/story-context/template" v="1.0">
+  <metadata>
+    <epicId>1</epicId>
+    <storyId>1.1</storyId>
+    <title>Initialize Project Structure and Build System</title>
+    <status>drafted</status>
+    <generatedAt>2025-11-13</generatedAt>
+    <generator>BMAD Story Context Workflow</generator>
+    <sourceStoryPath>.bmad-ephemeral/stories/1-1-initialize-project-structure-and-build-system.md</sourceStoryPath>
+  </metadata>
+
+  <story>
+    <asA>developer</asA>
+    <iWant>the complete project structure with React + Vite frontend and FastAPI backend initialized</iWant>
+    <soThat>I have a working development environment with hot module reload and a clear separation of concerns</soThat>
+    <tasks>
+- Task 1: Initialize Frontend (React + Vite + TypeScript) (AC: #1, #3, #4)
+  - Subtask 1.1: Create React + TypeScript + Vite project
+  - Subtask 1.2: Install core dependencies (react-router-dom, zustand)
+  - Subtask 1.3: Install and configure Tailwind CSS
+  - Subtask 1.4: Configure Vite proxy to forward `/api/*` to `http://localhost:8000`
+  - Subtask 1.5: Create project structure folders
+  - Subtask 1.6: Install ESLint and Prettier for frontend linting
+  - Subtask 1.7: Verify frontend runs at `http://localhost:5173` with hot module reload
+
+- Task 2: Initialize Backend (FastAPI + Python) (AC: #2, #4)
+  - Subtask 2.1: Create backend directory
+  - Subtask 2.2: Initialize Python virtual environment
+  - Subtask 2.3: Install FastAPI and core dependencies
+  - Subtask 2.4: Create project structure (app/features/, app/core/, main.py)
+  - Subtask 2.5: Create basic FastAPI app with health check endpoint
+  - Subtask 2.6: Install Black and Ruff for backend linting
+  - Subtask 2.7: Verify backend runs at `http://localhost:8000` with auto-reload
+
+- Task 3: Configure Project Files and Git (AC: #5, #6)
+  - Subtask 3.1: Create `.gitignore` for both frontend and backend
+  - Subtask 3.2: Create `.env.example` files
+  - Subtask 3.3: Create `README.md` with project overview
+  - Subtask 3.4: Initialize git repository
+  - Subtask 3.5: Document setup commands in README
+
+- Task 4: Test Integration (AC: #1, #2, #3)
+  - Subtask 4.1: Start both servers
+  - Subtask 4.2: Verify Vite proxy forwards requests
+  - Subtask 4.3: Test HMR on frontend
+  - Subtask 4.4: Test auto-reload on backend
+    </tasks>
+  </story>
+
+  <acceptanceCriteria>
+1. Given a greenfield project When I run the initialization commands Then I have a working frontend at `http://localhost:5173` with Vite HMR
+
+2. And I have a working backend at `http://localhost:8000` with FastAPI auto-reload
+
+3. And the frontend has a Vite proxy configured to forward `/api/*` requests to the backend
+
+4. And the project structure follows best practices:
+   - `frontend/src/` (components, pages, stores, services, utils)
+   - `backend/app/` (api, models, schemas, services, core)
+
+5. And I have package management configured (npm/pnpm for frontend, pip/poetry for backend)
+
+6. And basic linting is configured (ESLint + Prettier for frontend, Black + Ruff for backend)
+  </acceptanceCriteria>
+
+  <artifacts>
+    <docs>
+      <doc>
+        <path>docs/epics/epic-1-project-foundation-infrastructure.md</path>
+        <title>Epic 1: Project Foundation &amp; Infrastructure</title>
+        <section>Story 1.1: Initialize Project Structure and Build System</section>
+        <snippet>Complete epic context with acceptance criteria, prerequisites, and technical notes. Defines the foundation story that establishes React + Vite frontend and FastAPI backend with HMR, Vite proxy configuration, and project structure best practices.</snippet>
+      </doc>
+      <doc>
+        <path>docs/architecture/project-initialization.md</path>
+        <title>Project Initialization</title>
+        <section>Frontend Setup and Backend Setup</section>
+        <snippet>Exact commands for initializing the project: npm create vite, installing dependencies (react-router-dom, zustand, tailwindcss), backend setup with venv, and FastAPI + SQLAlchemy installation. Critical reference for implementation.</snippet>
+      </doc>
+      <doc>
+        <path>docs/architecture/project-structure.md</path>
+        <title>Project Structure</title>
+        <section>Complete Directory Tree</section>
+        <snippet>Defines the complete project structure including frontend (components/, pages/, stores/, services/, utils/, types/) and backend (features/ with Vertical Slice architecture, core/ for shared infrastructure). Shows folder organization for both nomi-frontend and nomi-backend.</snippet>
+      </doc>
+      <doc>
+        <path>docs/architecture/implementation-patterns.md</path>
+        <title>Implementation Patterns</title>
+        <section>NAMING PATTERNS, STRUCTURE PATTERNS, FORMAT PATTERNS</section>
+        <snippet>Critical patterns that ALL agents must follow: REST endpoints (plural, lowercase, hyphen-separated), Database (snake_case), Python files (snake_case), TypeScript/React (PascalCase components, camelCase services). Defines Vertical Slice + REPR pattern for backend organization.</snippet>
+      </doc>
+      <doc>
+        <path>docs/architecture/technology-stack-details.md</path>
+        <title>Technology Stack Details</title>
+        <section>Backend Stack, Frontend Stack, Integration Points</section>
+        <snippet>Specific version requirements: FastAPI 0.121.1, SQLAlchemy 2.0.44 (Async), PostgreSQL 16.x/17.x, React 19.2.0, TypeScript 5.9.x, Vite 7.1.9, Zustand 5.0.8, React Router 7.9.x, Tailwind CSS 4.0, MSAL Python 1.34.0. Defines integration architecture with Vite dev proxy and FastAPI static files.</snippet>
+      </doc>
+    </docs>
+    <code>
+      <!-- No existing code - this is the first story that creates the project structure -->
+      <note>Greenfield project initialization. No existing code to reference.</note>
+    </code>
+    <dependencies>
+      <frontend ecosystem="npm/node">
+        <package name="react" version="19.2.0" />
+        <package name="react-dom" version="19.2.0" />
+        <package name="typescript" version="~5.9.x" />
+        <package name="vite" version="7.1.9" />
+        <package name="react-router-dom" version="~7.9.x" />
+        <package name="zustand" version="5.0.8" />
+        <package name="tailwindcss" version="4.0" />
+        <package name="postcss" version="latest" devDependency="true" />
+        <package name="autoprefixer" version="latest" devDependency="true" />
+        <package name="eslint" version="latest" devDependency="true" />
+        <package name="prettier" version="latest" devDependency="true" />
+      </frontend>
+      <backend ecosystem="python/pip">
+        <package name="fastapi" version="&gt;=0.121.0" extras="standard" />
+        <package name="sqlalchemy" version="&gt;=2.0.44" extras="asyncio" />
+        <package name="alembic" version="&gt;=1.13.0" />
+        <package name="msal" version="&gt;=1.34.0" />
+        <package name="psycopg" version="&gt;=3.1.0" extras="binary" />
+        <package name="python-dotenv" version="&gt;=1.0.0" />
+        <package name="pydantic" version="&gt;=2.0.0" />
+        <package name="black" version="latest" devDependency="true" />
+        <package name="ruff" version="latest" devDependency="true" />
+      </backend>
+      <notes>
+        - Frontend uses Vite's React + TypeScript template as foundation
+        - Backend requires Python 3.10+
+        - PostgreSQL 16.x/17.x will be configured in Story 1.2 (not installed via pip)
+        - Redis 7.x for session storage (production only, Story 1.4)
+      </notes>
+    </dependencies>
+  </artifacts>
+
+  <constraints>
+    <constraint>Follow Vertical Slice + REPR pattern for backend organization (each endpoint in separate file)</constraint>
+    <constraint>Use exact project structure defined in docs/architecture/project-structure.md</constraint>
+    <constraint>Frontend directory naming: nomi-frontend/ with src/ subdirectories</constraint>
+    <constraint>Backend directory naming: nomi-backend/ with app/features/ (vertical slices) and app/core/ (shared infrastructure)</constraint>
+    <constraint>Naming conventions: REST endpoints (plural, lowercase, hyphen-separated), Database (snake_case), Python files (snake_case), TypeScript/React (PascalCase components, camelCase services)</constraint>
+    <constraint>Configure Vite proxy in vite.config.ts to forward /api/* to http://localhost:8000</constraint>
+    <constraint>Frontend must run on port 5173 with Vite HMR</constraint>
+    <constraint>Backend must run on port 8000 with FastAPI auto-reload</constraint>
+    <constraint>Use exact version requirements from technology-stack-details.md</constraint>
+    <constraint>Install linting tools: ESLint + Prettier for frontend, Black + Ruff for backend</constraint>
+    <constraint>Create .env.example files showing required environment variables (no actual secrets)</constraint>
+    <constraint>Follow single-server deployment pattern where FastAPI serves both React build and API endpoints</constraint>
+  </constraints>
+  <interfaces>
+    <interface>
+      <name>Health Check Endpoint (to be created in Story 1.3)</name>
+      <kind>REST endpoint</kind>
+      <signature>GET /health → {"status": "healthy"}</signature>
+      <path>To be created in nomi-backend/app/main.py</path>
+    </interface>
+    <interface>
+      <name>Vite Dev Server with Proxy</name>
+      <kind>Development proxy configuration</kind>
+      <signature>Vite proxy: /api/* → http://localhost:8000</signature>
+      <path>nomi-frontend/vite.config.ts</path>
+    </interface>
+    <interface>
+      <name>Project Directory Structure</name>
+      <kind>File system organization</kind>
+      <signature>Frontend: components/, pages/, stores/, services/, utils/, types/ | Backend: features/, core/</signature>
+      <path>Root directories: nomi-frontend/ and nomi-backend/</path>
+    </interface>
+  </interfaces>
+  <tests>
+    <standards>
+      For this project initialization story, testing focuses on verification rather than automated tests. Backend tests will use pytest with async support. Frontend tests will use Vitest (Vite's test framework). Tests should mirror feature structure. This story specifically requires manual integration testing to verify both dev servers start, HMR works, auto-reload works, and the Vite proxy correctly forwards API requests to the backend.
+    </standards>
+    <locations>
+      Backend: tests/features/ (mirrors app/features/ structure)
+      Frontend: src/components/**/*.test.tsx (co-located with components)
+      Test configuration: pytest.ini (backend), vitest.config.ts (frontend)
+    </locations>
+    <ideas>
+      <test id="AC-1" type="integration">
+        <description>Verify frontend starts at http://localhost:5173 with Vite HMR</description>
+        <steps>
+          1. Run npm run dev in nomi-frontend
+          2. Access http://localhost:5173 in browser
+          3. Make a small change to App.tsx
+          4. Verify hot module reload updates without full page refresh
+        </steps>
+      </test>
+      <test id="AC-2" type="integration">
+        <description>Verify backend starts at http://localhost:8000 with FastAPI auto-reload</description>
+        <steps>
+          1. Activate venv and run uvicorn app.main:app --reload in nomi-backend
+          2. Access http://localhost:8000 (should return 404 or basic response)
+          3. Make a small change to main.py
+          4. Verify server auto-reloads (watch console output)
+        </steps>
+      </test>
+      <test id="AC-3" type="integration">
+        <description>Verify Vite proxy forwards /api/* requests to backend</description>
+        <steps>
+          1. Create a test endpoint in backend: GET /api/test
+          2. Start both servers (frontend on 5173, backend on 8000)
+          3. From frontend, make fetch request to /api/test
+          4. Verify request is proxied to backend without CORS errors
+        </steps>
+      </test>
+      <test id="AC-4" type="verification">
+        <description>Verify project structure follows best practices</description>
+        <steps>
+          1. Check nomi-frontend/src/ has subdirectories: components/, pages/, stores/, services/, utils/, types/
+          2. Check nomi-backend/app/ has subdirectories: features/, core/
+          3. Verify main.py exists in nomi-backend/app/
+        </steps>
+      </test>
+      <test id="AC-5" type="verification">
+        <description>Verify package management is configured</description>
+        <steps>
+          1. Check nomi-frontend/package.json exists with all dependencies
+          2. Check nomi-backend/requirements.txt or pyproject.toml exists
+          3. Verify venv is created in nomi-backend/
+        </steps>
+      </test>
+      <test id="AC-6" type="verification">
+        <description>Verify linting is configured</description>
+        <steps>
+          1. Check frontend has .eslintrc.cjs and .prettierrc
+          2. Run npm run lint in frontend (should execute without errors)
+          3. Check backend has Black and Ruff installed
+          4. Run black --check . and ruff check . in backend
+        </steps>
+      </test>
+    </ideas>
+  </tests>
+</story-context>
