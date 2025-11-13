@@ -1,6 +1,6 @@
 # Story 1.1: Initialize Project Structure and Build System
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -26,36 +26,36 @@ So that I have a working development environment with hot module reload and a cl
 
 ## Tasks / Subtasks
 
-- [ ] **Task 1: Initialize Frontend (React + Vite + TypeScript)** (AC: #1, #3, #4)
-  - [ ] Subtask 1.1: Create React + TypeScript + Vite project (`npm create vite@latest nomi-frontend -- --template react-ts`)
-  - [ ] Subtask 1.2: Install core dependencies (react-router-dom, zustand)
-  - [ ] Subtask 1.3: Install and configure Tailwind CSS
-  - [ ] Subtask 1.4: Configure Vite proxy to forward `/api/*` to `http://localhost:8000`
-  - [ ] Subtask 1.5: Create project structure folders (components/, pages/, stores/, services/, utils/, types/)
-  - [ ] Subtask 1.6: Install ESLint and Prettier for frontend linting
-  - [ ] Subtask 1.7: Verify frontend runs at `http://localhost:5173` with hot module reload
+- [x] **Task 1: Initialize Frontend (React + Vite + TypeScript)** (AC: #1, #3, #4)
+  - [x] Subtask 1.1: Create React + TypeScript + Vite project (`npm create vite@latest nomi-frontend -- --template react-ts`)
+  - [x] Subtask 1.2: Install core dependencies (react-router-dom, zustand)
+  - [x] Subtask 1.3: Install and configure Tailwind CSS
+  - [x] Subtask 1.4: Configure Vite proxy to forward `/api/*` to `http://localhost:8000`
+  - [x] Subtask 1.5: Create project structure folders (components/, pages/, stores/, services/, utils/, types/)
+  - [x] Subtask 1.6: Install ESLint and Prettier for frontend linting
+  - [x] Subtask 1.7: Verify frontend runs at `http://localhost:5173` with hot module reload
 
-- [ ] **Task 2: Initialize Backend (FastAPI + Python)** (AC: #2, #4)
-  - [ ] Subtask 2.1: Create backend directory `nomi-backend`
-  - [ ] Subtask 2.2: Initialize Python virtual environment
-  - [ ] Subtask 2.3: Install FastAPI and core dependencies (fastapi[standard], sqlalchemy[asyncio], alembic, msal, psycopg, python-dotenv, pydantic)
-  - [ ] Subtask 2.4: Create project structure (app/features/, app/core/, main.py)
-  - [ ] Subtask 2.5: Create basic FastAPI app with health check endpoint
-  - [ ] Subtask 2.6: Install Black and Ruff for backend linting
-  - [ ] Subtask 2.7: Verify backend runs at `http://localhost:8000` with auto-reload
+- [x] **Task 2: Initialize Backend (FastAPI + Python)** (AC: #2, #4)
+  - [x] Subtask 2.1: Create backend directory `nomi-backend`
+  - [x] Subtask 2.2: Initialize Python virtual environment (skipped - using devcontainer)
+  - [x] Subtask 2.3: Install FastAPI and core dependencies (fastapi[standard], sqlalchemy[asyncio], alembic, msal, psycopg, python-dotenv, pydantic)
+  - [x] Subtask 2.4: Create project structure (app/features/, app/core/, main.py)
+  - [x] Subtask 2.5: Create basic FastAPI app with health check endpoint
+  - [x] Subtask 2.6: Install Black and Ruff for backend linting
+  - [x] Subtask 2.7: Verify backend runs at `http://localhost:8000` with auto-reload
 
-- [ ] **Task 3: Configure Project Files and Git** (AC: #5, #6)
-  - [ ] Subtask 3.1: Create `.gitignore` for both frontend and backend
-  - [ ] Subtask 3.2: Create `.env.example` files for environment variables template
-  - [ ] Subtask 3.3: Create `README.md` with project overview and quick start instructions
-  - [ ] Subtask 3.4: Initialize git repository and create initial commit
-  - [ ] Subtask 3.5: Document setup commands in README
+- [x] **Task 3: Configure Project Files and Git** (AC: #5, #6)
+  - [x] Subtask 3.1: Create `.gitignore` for both frontend and backend
+  - [x] Subtask 3.2: Create `.env.example` files for environment variables template
+  - [x] Subtask 3.3: Create `README.md` with project overview and quick start instructions
+  - [x] Subtask 3.4: Initialize git repository and create initial commit (staged, pending user confirmation)
+  - [x] Subtask 3.5: Document setup commands in README
 
-- [ ] **Task 4: Test Integration** (AC: #1, #2, #3)
-  - [ ] Subtask 4.1: Start both frontend and backend servers
-  - [ ] Subtask 4.2: Verify Vite proxy forwards requests from frontend to backend
-  - [ ] Subtask 4.3: Test HMR on frontend (make a change, verify hot reload)
-  - [ ] Subtask 4.4: Test auto-reload on backend (make a change, verify restart)
+- [x] **Task 4: Test Integration** (AC: #1, #2, #3)
+  - [x] Subtask 4.1: Start both frontend and backend servers
+  - [x] Subtask 4.2: Verify Vite proxy forwards requests from frontend to backend
+  - [x] Subtask 4.3: Test HMR on frontend (make a change, verify hot reload)
+  - [x] Subtask 4.4: Test auto-reload on backend (make a change, verify restart)
 
 ## Dev Notes
 
@@ -198,10 +198,65 @@ main.py         # FastAPI app initialization
 
 ### Agent Model Used
 
-{{agent_model_name_version}}
+Claude Sonnet 4.5 (claude-sonnet-4-5-20250929)
 
 ### Debug Log References
 
+N/A - No blocking issues encountered
+
 ### Completion Notes List
 
+- Successfully initialized frontend with React 19.2.0, Vite 7.2.2, TypeScript 5.9.x
+- Installed all required dependencies: react-router-dom 7.9.6, zustand 5.0.8, tailwindcss 4.1.17
+- Configured Vite proxy to forward /api/* requests to backend at http://localhost:8000
+- Created complete frontend directory structure with components/ (common/, tasks/, inspirations/, layout/), pages/, stores/, services/, utils/, types/
+- Initialized backend with FastAPI 0.121.2, SQLAlchemy 2.0.44, and all required dependencies
+- Used requirements.txt instead of virtual environment (devcontainer environment)
+- Created backend structure with app/features/ (Vertical Slice architecture) and app/core/
+- Implemented basic FastAPI app with /api/health endpoint and CORS configuration
+- Configured Black 25.11.0 and Ruff 0.14.4 for backend linting (updated to new ruff.lint config format)
+- Configured ESLint 9.39.1 and Prettier for frontend linting
+- Created comprehensive .gitignore files for both frontend and backend
+- Created .env.example files with environment variable templates
+- Created comprehensive README.md with project overview, technology stack, and quick start instructions
+- Verified both servers start correctly (frontend on :5173, backend on :8000)
+- Verified Vite proxy successfully forwards API requests to backend
+- Verified auto-reload works on both frontend (HMR) and backend (uvicorn --reload)
+- All linting checks pass (ESLint, Prettier, Black, Ruff)
+- Git repository initialized with staged changes ready for initial commit
+
 ### File List
+
+**Frontend (nomi-frontend/):**
+- package.json - Dependencies and scripts
+- vite.config.ts - Vite configuration with proxy setup
+- tailwind.config.js - Tailwind CSS configuration
+- postcss.config.js - PostCSS configuration
+- .prettierrc - Prettier configuration
+- .gitignore - Frontend gitignore
+- .env.example - Environment variable template
+- src/index.css - Tailwind directives
+- src/App.tsx - Updated with project branding
+- src/components/common/ - Common components directory
+- src/components/tasks/ - Task components directory
+- src/components/inspirations/ - Inspiration components directory
+- src/components/layout/ - Layout components directory
+- src/pages/ - Page components directory
+- src/stores/ - Zustand stores directory
+- src/services/ - API services directory
+- src/utils/ - Utility functions directory
+- src/types/ - TypeScript types directory
+
+**Backend (nomi-backend/):**
+- requirements.txt - Python dependencies
+- pyproject.toml - Black and Ruff configuration
+- .gitignore - Backend gitignore
+- .env.example - Environment variable template
+- app/__init__.py - App package marker
+- app/main.py - FastAPI application with /api router and health endpoint
+- app/features/__init__.py - Features package marker
+- app/core/__init__.py - Core package marker
+
+**Root:**
+- README.md - Project documentation with setup instructions
+- .gitignore - Root gitignore (updated with .claude/, .bmad/ exclusions)
