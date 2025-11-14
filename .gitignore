@@ -101,10 +101,5 @@ dist
 .DS_Store
 .claude/
 
-# BMAD project management
-.bmad/
-.bmad-ephemeral/
-docs/
-
 # OS
 Thumbs.db

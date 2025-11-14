@@ -1,0 +1,153 @@
+<story-context id=".bmad/bmm/workflows/4-implementation/story-context/template" v="1.0">
+  <metadata>
+    <epicId>1</epicId>
+    <storyId>2</storyId>
+    <title>Set Up PostgreSQL Database and SQLAlchemy ORM</title>
+    <status>drafted</status>
+    <generatedAt>2025-11-14</generatedAt>
+    <generator>BMAD Story Context Workflow</generator>
+    <sourceStoryPath>.bmad-ephemeral/stories/1-2-set-up-postgresql-database-and-sqlalchemy-orm.md</sourceStoryPath>
+  </metadata>
+
+  <story>
+    <asA>developer</asA>
+    <iWant>PostgreSQL configured with SQLAlchemy ORM and Alembic migrations</iWant>
+    <soThat>I have a production-grade relational database ready for user-specific data storage</soThat>
+    <tasks>
+      <task id="0" title="Set Up PostgreSQL in Devcontainer Docker Compose" ac="1">
+        <subtask id="0.1">Update .devcontainer/docker-compose.yml to add PostgreSQL 16 service</subtask>
+        <subtask id="0.2">Configure PostgreSQL environment variables (POSTGRES_USER=nomi, POSTGRES_PASSWORD=nomi, POSTGRES_DB=nomi)</subtask>
+        <subtask id="0.3">Map PostgreSQL port 5432 to host</subtask>
+        <subtask id="0.4">Add persistent volume for PostgreSQL data</subtask>
+        <subtask id="0.5">Update .devcontainer/devcontainer.json to depend on the db service</subtask>
+        <subtask id="0.6">Verify PostgreSQL starts automatically when devcontainer launches</subtask>
+      </task>
+      <task id="1" title="Configure PostgreSQL Connection and SQLAlchemy" ac="2,3,7">
+        <subtask id="1.1">Create app/core/database.py with async SQLAlchemy engine and session factory</subtask>
+        <subtask id="1.2">Create declarative Base class for ORM models</subtask>
+        <subtask id="1.3">Add DATABASE_URL to .env.example with PostgreSQL connection string format</subtask>
+        <subtask id="1.4">Update app/core/config.py to load DATABASE_URL from environment</subtask>
+        <subtask id="1.5">Configure async connection pool (min 5, max 20 connections)</subtask>
+        <subtask id="1.6">Test database connection by importing database module in main.py</subtask>
+      </task>
+      <task id="2" title="Initialize Alembic for Migrations" ac="4,6">
+        <subtask id="2.1">Run alembic init alembic to create migration directory structure</subtask>
+        <subtask id="2.2">Configure alembic.ini to use DATABASE_URL from environment</subtask>
+        <subtask id="2.3">Update alembic/env.py to import Base from app.core.database</subtask>
+        <subtask id="2.4">Update alembic/env.py to support async migrations</subtask>
+        <subtask id="2.5">Verify alembic can connect to database with alembic current</subtask>
+      </task>
+      <task id="3" title="Create Users Table Model and Migration" ac="5,6">
+        <subtask id="3.1">Create app/features/users/ directory structure</subtask>
+        <subtask id="3.2">Create app/features/users/model.py with User SQLAlchemy model</subtask>
+        <subtask id="3.3">Define User model fields: id (UUID primary key), email (VARCHAR 255, unique, indexed), name (VARCHAR 255), entraid_user_id (VARCHAR 255, unique, indexed), created_at (TIMESTAMP WITH TIME ZONE), updated_at (TIMESTAMP WITH TIME ZONE)</subtask>
+        <subtask id="3.4">Generate migration with alembic revision --autogenerate -m "Create users table"</subtask>
+        <subtask id="3.5">Review generated migration script for accuracy</subtask>
+        <subtask id="3.6">Apply migration with alembic upgrade head</subtask>
+        <subtask id="3.7">Verify users table exists in PostgreSQL with correct schema</subtask>
+      </task>
+      <task id="4" title="Test Database Integration" ac="2,3,6">
+        <subtask id="4.1">Create basic integration test in tests/test_database.py</subtask>
+        <subtask id="4.2">Test database connection acquisition from pool</subtask>
+        <subtask id="4.3">Test alembic current command returns migration version</subtask>
+        <subtask id="4.4">Verify users table schema matches model definition</subtask>
+        <subtask id="4.5">Document database setup steps in README.md</subtask>
+      </task>
+    </tasks>
+  </story>
+
+  <acceptanceCriteria>
+    <criterion id="1">Given the devcontainer environment When I start the devcontainer Then PostgreSQL is automatically running via docker-compose</criterion>
+    <criterion id="2">And the backend project structure exists When I configure the database connection Then I can connect to PostgreSQL (local or Docker)</criterion>
+    <criterion id="3">And SQLAlchemy is configured with a base model class</criterion>
+    <criterion id="4">And Alembic is initialized for database migrations</criterion>
+    <criterion id="5">And I have a users table schema defined with fields: id (UUID), email, name, entraid_user_id, created_at, updated_at</criterion>
+    <criterion id="6">And I can run alembic upgrade head to apply migrations</criterion>
+    <criterion id="7">And Database connection settings are environment-based (.env file)</criterion>
+  </acceptanceCriteria>
+
+  <artifacts>
+    <docs>
+      <doc path=".bmad-ephemeral/stories/tech-spec-epic-1.md" title="Epic 1 Technical Specification" section="Database Models and Contracts">
+        Defines SQLAlchemy async patterns with AsyncSession, database.py structure with create_async_engine and async_sessionmaker, User model with UUID primary key and proper indexes.
+      </doc>
+      <doc path="docs/architecture/data-architecture.md" title="Data Architecture" section="Database Schema">
+        PostgreSQL schema for users table with UUID primary keys, entraid_user_id, email, name, timestamps. Includes index definitions for performance.
+      </doc>
+      <doc path="docs/architecture/technology-stack-details.md" title="Technology Stack Details" section="Backend Stack">
+        FastAPI 0.121.1, SQLAlchemy 2.0.44 async, PostgreSQL 16+, psycopg v3 async driver. Specifies use of AsyncSession and modern ORM patterns.
+      </doc>
+      <doc path="docs/epics/epic-1-project-foundation-infrastructure.md" title="Epic 1: Project Foundation" section="Story 1.2">
+        Database setup as foundational infrastructure. Prerequisites for authentication (Epic 2) and data models (Epics 3-4).
+      </doc>
+      <doc path="docs/architecture/implementation-patterns.md" title="Implementation Patterns" section="Naming and Structure">
+        Vertical slice architecture with app/features/ organization. Naming conventions: snake_case for Python, PascalCase for classes, UUID primary keys pattern.
+      </doc>
+    </docs>
+    <code>
+      <artifact path="nomi-backend/app/main.py" kind="application" symbol="app" lines="1-41" reason="Existing FastAPI application setup with CORS middleware and API router. Database imports will be added here for connection testing."/>
+      <artifact path="nomi-backend/requirements.txt" kind="dependencies" symbol="N/A" lines="1-12" reason="Already includes sqlalchemy[asyncio]>=2.0.44, alembic>=1.13.0, psycopg[binary]>=3.1.0. May need asyncpg driver addition."/>
+      <artifact path="nomi-backend/.env.example" kind="config" symbol="DATABASE_URL" lines="4-5" reason="Environment template already has DATABASE_URL configured for postgresql connection. Story will update to use asyncpg driver."/>
+      <artifact path=".devcontainer/docker-compose.yml" kind="infrastructure" symbol="python-dev" lines="1-31" reason="Existing devcontainer setup with commented postgres service example. Story will uncomment and configure PostgreSQL 16 service."/>
+      <artifact path=".devcontainer/devcontainer.json" kind="infrastructure" symbol="N/A" lines="1-43" reason="Devcontainer config that references docker-compose.yml. Will need to ensure service dependency on db service."/>
+    </code>
+    <dependencies>
+      <python>
+        <package name="fastapi" version=">=0.121.0" extras="standard"/>
+        <package name="sqlalchemy" version=">=2.0.44" extras="asyncio"/>
+        <package name="alembic" version=">=1.13.0"/>
+        <package name="psycopg" version=">=3.1.0" extras="binary"/>
+        <package name="asyncpg" version=">=0.30.0" note="May need to add for async PostgreSQL driver"/>
+        <package name="python-dotenv" version=">=1.0.0"/>
+        <package name="pydantic" version=">=2.0.0"/>
+        <package name="black" version=">=24.0.0" dev="true"/>
+        <package name="ruff" version=">=0.8.0" dev="true"/>
+      </python>
+      <docker>
+        <service name="postgres" image="postgres:16" note="To be added to devcontainer docker-compose.yml"/>
+      </docker>
+    </dependencies>
+  </artifacts>
+
+  <constraints>
+    <constraint type="architecture">Use async SQLAlchemy patterns throughout: AsyncSession, async with statements, create_async_engine. No synchronous database operations.</constraint>
+    <constraint type="architecture">Follow vertical slice architecture: User model goes in app/features/users/model.py, not app/models/user.py</constraint>
+    <constraint type="database">All tables use UUID primary keys with PostgreSQL gen_random_uuid() default</constraint>
+    <constraint type="database">All tables require created_at and updated_at TIMESTAMP WITH TIME ZONE fields</constraint>
+    <constraint type="database">Foreign keys must be indexed for query performance</constraint>
+    <constraint type="configuration">Database credentials via environment variables only (DATABASE_URL in .env)</constraint>
+    <constraint type="configuration">For devcontainer: DATABASE_URL uses hostname 'db' (docker-compose service name). For local: use 'localhost'</constraint>
+    <constraint type="migrations">Alembic configured for async migrations with proper env.py setup importing Base metadata</constraint>
+    <constraint type="naming">Database: snake_case tables and columns. Python: snake_case files/functions, PascalCase classes</constraint>
+    <constraint type="testing">Use pytest with pytest-asyncio for async test support. Integration tests verify database connectivity and schema.</constraint>
+  </constraints>
+
+  <interfaces>
+    <interface name="AsyncSession Database Factory" kind="function" signature="async def get_db() -> AsyncGenerator[AsyncSession, None]" path="app/core/database.py">
+      Dependency injection pattern for FastAPI endpoints. Yields async database session, ensures cleanup with finally block.
+    </interface>
+    <interface name="SQLAlchemy Base" kind="class" signature="Base = declarative_base()" path="app/core/database.py">
+      Declarative base class for all ORM models. Import this in model files to define SQLAlchemy models.
+    </interface>
+    <interface name="Async Engine" kind="variable" signature="engine: AsyncEngine" path="app/core/database.py">
+      Global async SQLAlchemy engine created with create_async_engine. Configured with connection pool (min 5, max 20).
+    </interface>
+    <interface name="User Model" kind="class" signature="class User(Base)" path="app/features/users/model.py">
+      SQLAlchemy ORM model for users table. Fields: id (UUID), entraid_user_id (str), email (str), name (str), created_at, updated_at.
+    </interface>
+  </interfaces>
+
+  <tests>
+    <standards>Use pytest as test framework with pytest-asyncio plugin for async test support. Integration tests verify database connectivity, session factory, and schema. Tests should use test database, not production. Verify Alembic migrations apply cleanly.</standards>
+    <locations>tests/ directory at nomi-backend/tests/. Test files follow pattern test_*.py. Database tests in tests/test_database.py</locations>
+    <ideas>
+      <idea ac="1">Test that PostgreSQL service starts automatically when devcontainer launches. Verify with docker ps or pg_isready command.</idea>
+      <idea ac="2">Integration test: Create async session from get_db(), verify connection succeeds, verify session closes properly.</idea>
+      <idea ac="3">Test that Base class can be imported and subclassed. Verify metadata contains User table definition.</idea>
+      <idea ac="4">Test alembic current command returns version. Test alembic upgrade head succeeds without errors.</idea>
+      <idea ac="5">After migration: Query users table schema from PostgreSQL, verify columns match User model (id UUID, entraid_user_id VARCHAR, etc.)</idea>
+      <idea ac="6">Test alembic downgrade and upgrade cycle. Verify idempotency of migrations.</idea>
+      <idea ac="7">Test DATABASE_URL loads from .env file correctly. Test connection fails gracefully with invalid credentials.</idea>
+    </ideas>
+  </tests>
+</story-context>
